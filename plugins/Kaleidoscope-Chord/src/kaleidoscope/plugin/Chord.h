@@ -37,6 +37,7 @@ class Chord : public kaleidoscope::Plugin {
   EventHandlerResult onKeyswitchEvent(KeyEvent &event);
   EventHandlerResult afterEachCycle();
   void setTimeout(uint8_t timeout);
+  void setMinimumPriorInterval(uint8_t min_interval);
 
   template<uint8_t _chord_defs_size>
   void configure(Key const (&chords)[_chord_defs_size]) {
@@ -45,6 +46,8 @@ class Chord : public kaleidoscope::Plugin {
   }
 
  private:
+  bool isExpectedBeforeChord(Key key);
+  void resetPriorKeypressTimestamp();
   void resolveOrArpeggiate();
   void resolve(Key target_key);
   bool inChord(uint8_t index, Key key);
@@ -67,6 +70,8 @@ class Chord : public kaleidoscope::Plugin {
   uint8_t chord_defs_size_{0};
 
   uint8_t timeout_ = 50;
+  uint8_t minimum_prior_interval_{150};
+  uint16_t prior_keypress_timestamp_{256};
 };
 }  // namespace plugin
 }  // namespace kaleidoscope

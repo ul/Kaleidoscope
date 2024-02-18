@@ -43,6 +43,15 @@ EventHandlerResult Chord::onKeyswitchEvent(KeyEvent &event) {
     return EventHandlerResult::OK;
   }
 
+  if (potential_chord_size_ == 0) {
+    if (!Runtime.hasTimeExpired(prior_keypress_timestamp_, minimum_prior_interval_)) {
+      return EventHandlerResult::OK;
+    }
+    if (!isExpectedBeforeChord(event.key)) {
+      prior_keypress_timestamp_ = Runtime.millisAtCycleStart();
+    }
+  }
+
   appendEvent(event);
 
   if (isChordStrictSubset()) {
@@ -58,6 +67,7 @@ EventHandlerResult Chord::onKeyswitchEvent(KeyEvent &event) {
     return EventHandlerResult::OK;
   }
 
+  resetPriorKeypressTimestamp();
   potential_chord_size_ = 0;
   event.key             = target_key;
   return EventHandlerResult::OK;
@@ -67,11 +77,35 @@ EventHandlerResult Chord::afterEachCycle() {
   if (Runtime.hasTimeExpired(start_time_, timeout_) && potential_chord_size_ > 0) {
     resolveOrArpeggiate();
   }
+
+  // If there hasn't been a keypress in a while, update the prior keypress
+  // timestamp to avoid integer overflow issues:
+  if (Runtime.hasTimeExpired(prior_keypress_timestamp_, minimum_prior_interval_)) {
+    resetPriorKeypressTimestamp();
+  }
+
   return EventHandlerResult::OK;
 }
 
 void Chord::setTimeout(uint8_t timeout) {
   timeout_ = timeout;
+}
+
+void Chord::setMinimumPriorInterval(uint8_t min_interval) {
+  minimum_prior_interval_ = min_interval;
+}
+
+bool Chord::isExpectedBeforeChord(Key key) {
+  return key.isKeyboardModifier()
+    || key.isLayerShift()
+    || key == Key_Space
+    || key == Key_Esc
+    || key == Key_Tab
+    || key == Key_LeftArrow || key == Key_RightArrow || key == Key_UpArrow || key == Key_DownArrow;
+}
+
+void Chord::resetPriorKeypressTimestamp() {
+  prior_keypress_timestamp_ = Runtime.millisAtCycleStart() - (minimum_prior_interval_ + 1);
 }
 
 void Chord::resolveOrArpeggiate() {
@@ -84,6 +118,8 @@ void Chord::resolveOrArpeggiate() {
 }
 
 void Chord::resolve(Key target_key) {
+  resetPriorKeypressTimestamp();
+
   KeyEvent event        = potential_chord_[potential_chord_size_ - 1];
   potential_chord_size_ = 0;
 
