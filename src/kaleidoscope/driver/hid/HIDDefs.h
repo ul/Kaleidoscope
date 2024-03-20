@@ -1,6 +1,6 @@
-/* -*- mode: c++ -*-
- * Kaleidoscope-LEDEffects -- An assorted collection of LED effects for Kaleidoscope
- * Copyright (C) 2016, 2017  Keyboard.io, Inc
+// -*- mode: c++ -*-
+/* Kaleidoscope - Firmware for computer input devices
+ * Copyright (C) 2024  Keyboard.io, Inc.
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -15,11 +15,6 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kaleidoscope/plugin/Miami.h"
+#pragma once
 
-#include "kaleidoscope/device/device.h"    // for CRGB
-#include "kaleidoscope/plugin/TriColor.h"  // for TriColor
-
-kaleidoscope::plugin::TriColor MiamiEffect("Miami",
-                                           CRGB(0x4e, 0xd6, 0xd6),  /* Cyan */
-                                           CRGB(0xaf, 0x67, 0xfa)); /* Magenta */
+#include "tusb_hid.h"

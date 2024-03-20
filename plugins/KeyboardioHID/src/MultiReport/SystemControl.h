@@ -30,47 +30,15 @@ THE SOFTWARE.
 #include "HID.h"
 #include "HID-Settings.h"
 #include "HIDTables.h"
-#include "tusb_hid.h"
+#include "kaleidoscope/driver/hid/apis/SystemControlAPI.h"
 
-#define DESCRIPTOR_SYSTEM_CONTROL(...)                  \
-  /* TODO(anyone) limit to system keys only? */         \
-  /* System Control (Power Down, Sleep, Wakeup, ...) */ \
-  HID_USAGE_PAGE(HID_USAGE_PAGE_DESKTOP),               \
-    HID_USAGE(HID_USAGE_DESKTOP_SYSTEM_CONTROL),        \
-    HID_COLLECTION(HID_COLLECTION_APPLICATION),         \
-                                                        \
-    /* Report ID (if any) */                            \
-    __VA_ARGS__                                         \
-                                                        \
-      HID_LOGICAL_MIN(0),                               \
-    HID_LOGICAL_MAX_N(255, 2),                          \
-    HID_USAGE_MIN(0),                                   \
-    HID_USAGE_MAX(255),                                 \
-    HID_REPORT_COUNT(1),                                \
-    HID_REPORT_SIZE(8),                                 \
-    HID_INPUT(HID_DATA | HID_ARRAY | HID_ABSOLUTE),     \
-                                                        \
-    HID_COLLECTION_END
-
-typedef union {
-  // Every usable system control key possible
-  uint8_t key;
-} HID_SystemControlReport_Data_t;
-
-
-class SystemControl_ {
+class SystemControl_ : public SystemControlAPI {
  public:
-  void begin();
-  void end();
-  void write(uint8_t s);
-  void press(uint8_t s);
-  void release();
-  void releaseAll();
-  void sendReport(void *data, int length);
-
   SystemControl_();
 
  protected:
+  void sendReport(void *data, int length);
+  bool wakeupHost(uint8_t s);
 };
 
 

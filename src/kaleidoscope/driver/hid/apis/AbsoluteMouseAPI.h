@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2014-2015 NicoHood
-Copyright (c) 2015-2018 Keyboard.io, Inc
+Copyright (c) 2015-2024 Keyboard.io, Inc
 
 See the readme for credit to other people.
 
@@ -27,10 +27,8 @@ THE SOFTWARE.
 #pragma once
 
 #include <Arduino.h>
-#include "HID.h"
-#include "HID-Settings.h"
-#include "MouseButtons.h"
-#include "tusb_hid.h"
+#include "kaleidoscope/driver/hid/HIDDefs.h"
+#include "kaleidoscope/MouseButtons.h"
 
 #define DESCRIPTOR_ABSOLUTE_MOUSE(...)                 \
   HID_USAGE_PAGE(HID_USAGE_PAGE_DESKTOP),              \

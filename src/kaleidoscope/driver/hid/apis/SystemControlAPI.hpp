@@ -23,20 +23,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-// Include guard
 #pragma once
 
-#include <Arduino.h>
-#include "HID.h"
-#include "HID-Settings.h"
+SystemControlAPI::SystemControlAPI() {
+}
 
-#include "kaleidoscope/driver/hid/apis/ConsumerControlAPI.h"
+void SystemControlAPI::begin() {
+}
 
-class ConsumerControl_ : public ConsumerControlAPI {
- public:
-  ConsumerControl_();
+void SystemControlAPI::end() {
+  releaseAll();
+}
 
- protected:
-  void sendReportUnchecked();
-};
-extern ConsumerControl_ ConsumerControl;
+void SystemControlAPI::write(uint8_t s) {
+  press(s);
+  release();
+}
+
+void SystemControlAPI::release() {
+  releaseAll();
+}
+
+void SystemControlAPI::releaseAll() {
+  uint8_t report = 0x00;
+  sendReport(&report, sizeof(report));
+}
+
+void SystemControlAPI::press(uint8_t s) {
+  if (!wakeupHost(s)) {
+    sendReport(&s, sizeof(s));
+  }
+}
