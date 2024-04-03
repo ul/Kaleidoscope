@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 /* Kaleidoscope - Firmware for computer input devices
- * Copyright (C) 2024  Keyboard.io, Inc.
+ * Copyright (C) 2013-2024  Keyboard.io, Inc.
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -15,10 +15,30 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifdef USE_TINYUSB
 
-#ifndef USE_TINYUSB
-#include "tusb_hid.h"
-#else
-#include "class/hid/hid.h"
-#endif
+#include "AbsoluteMouse.h"
+
+namespace kaleidoscope {
+namespace driver {
+namespace hid {
+namespace tinyusb {
+
+static const uint8_t AbsoluteMouseDesc[] = {
+  DESCRIPTOR_ABSOLUTE_MOUSE(),
+};
+
+TUSBAbsoluteMouse_::TUSBAbsoluteMouse_()
+  : HIDD(AbsoluteMouseDesc, sizeof(AbsoluteMouseDesc), HID_ITF_PROTOCOL_NONE, 1) {}
+
+TUSBAbsoluteMouse_ &TUSBAbsoluteMouse() {
+  static TUSBAbsoluteMouse_ obj;
+  return obj;
+}
+
+}  // namespace tinyusb
+}  // namespace hid
+}  // namespace driver
+}  // namespace kaleidoscope
+
+#endif /* USE_TINYUSB */
