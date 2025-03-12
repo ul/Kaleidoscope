@@ -32,7 +32,7 @@ pathsafe_fqbn   := $(subst :,_,${FQBN})
 build_root       := ${top_dir}/_build/$(pathsafe_fqbn)
 
 
-export KALEIDOSCOPE_TEMP_PATH := ${build_root}/kaleidoscope
+export KALEIDOSCOPE_TEMP_PATH := ${build_root}/${testcase}/kaleidoscope-temp
 
 include_plugins_dir := -I${top_dir}/plugins \
 
@@ -92,7 +92,7 @@ ${BIN_DIR}/${BIN_FILE}: compile-sketch
 .PHONY: compile-sketch
 compile-sketch: ${libcommon_a} ${TEST_OBJS}
 	-@install -d "${BIN_DIR}" "${LIB_DIR}"
-	$(QUIET) env LIBONLY=yes VERBOSE=${VERBOSE}  \
+	$(QUIET) env LIBONLY=yes VERBOSE=${VERBOSE}  QUIET=$(QUIET) \
 		OUTPUT_PATH="${LIB_DIR}" \
 		_ARDUINO_CLI_COMPILE_CUSTOM_FLAGS='--build-property upload.maximum_size=""' \
 		$(MAKE) -f ${top_dir}/etc/makefiles/sketch.mk compile

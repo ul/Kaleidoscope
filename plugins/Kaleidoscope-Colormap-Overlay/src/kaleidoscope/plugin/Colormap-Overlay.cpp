@@ -1,9 +1,15 @@
-/* Kaleidoscope-Colormap-Overlay - A LED plugin for Kaleidoscope.
- * Copyright (C) 2017-2018  Keyboard.io, Inc.
+/* Kaleidoscope-Colormap-Overlay -- Per key colors overlaying active LED effect
+ * Copyright 2017-2025 Keyboard.io, inc.
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, version 3.
+ *
+ * Additional Permissions:
+ * As an additional permission under Section 7 of the GNU General Public
+ * License Version 3, you may link this software against a Vendor-provided
+ * Hardware Specific Software Module under the terms of the MCU Vendor
+ * Firmware Library Additional Permission Version 1.0.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -35,19 +41,24 @@ void ColormapOverlay::setup() {
 }
 
 bool ColormapOverlay::hasOverlay(KeyAddr k) {
+  uint8_t top_layer   = Layer.mostRecent();
   uint8_t layer_index = Layer.lookupActiveLayer(k);
+
+  bool found_match_on_lower_layer = false;
   for (uint8_t i{0}; i < overlay_count_; ++i) {
     Overlay overlay = overlays_[i];
     if (overlay.addr == k) {
-      if ((overlay.layer == layer_index) ||
-          (overlay.layer == layer_wildcard)) {
+      if ((overlay.layer == top_layer) || (overlay.layer == layer_wildcard)) {
         selectedColor = ::LEDPaletteTheme.lookupPaletteColor(overlay.palette_index);
         return true;
+      } else if (overlay.layer == layer_index) {
+        selectedColor              = ::LEDPaletteTheme.lookupPaletteColor(overlay.palette_index);
+        found_match_on_lower_layer = true;
       }
     }
   }
 
-  return false;
+  return found_match_on_lower_layer;
 }
 
 EventHandlerResult ColormapOverlay::onSetup() {

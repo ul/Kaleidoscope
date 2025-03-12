@@ -1,10 +1,15 @@
-// -*- mode: c++ -*-
 /* Kaleidoscope - Firmware for computer input devices
- * Copyright (C) 2013-2019  Keyboard.io, Inc.
+ * Copyright (C) 2013-2025 Keyboard.io, inc.
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, version 3.
+ *
+ * Additional Permissions:
+ * As an additional permission under Section 7 of the GNU General Public
+ * License Version 3, you may link this software against a Vendor-provided
+ * Hardware Specific Software Module under the terms of the MCU Vendor
+ * Firmware Library Additional Permission Version 1.0.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -21,6 +26,8 @@
 #include "kaleidoscope/driver/hid/keyboardio/AbsoluteMouse.h"  // for AbsoluteMouse, AbsoluteMou...
 #include "kaleidoscope/driver/hid/keyboardio/Keyboard.h"       // for Keyboard, KeyboardProps
 #include "kaleidoscope/driver/hid/keyboardio/Mouse.h"          // for Mouse, MouseProps
+
+#define KALEIDOSCOPE_HID_DRIVER_KEYBOARDIOHID
 
 namespace kaleidoscope {
 namespace driver {

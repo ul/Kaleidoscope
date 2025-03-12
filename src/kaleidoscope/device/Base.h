@@ -1,10 +1,16 @@
 /* -*- mode: c++ -*-
- * kaleidoscope::device::Base -- Kaleidoscope device Base class
- * Copyright (C) 2017-2021  Keyboard.io, Inc
+ * Kaleidoscope - Firmware for computer input devices
+ * Copyright (C) 2017-2025 Keyboard.io, inc.
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, version 3.
+ *
+ * Additional Permissions:
+ * As an additional permission under Section 7 of the GNU General Public
+ * License Version 3, you may link this software against a Vendor-provided
+ * Hardware Specific Software Module under the terms of the MCU Vendor
+ * Firmware Library Additional Permission Version 1.0.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -131,6 +137,14 @@ class Base {
   static constexpr int8_t numKeys() {
     return matrix_columns * matrix_rows;
   }
+
+  /**
+  * @returns the number of LEDs on the keyboard.
+  */
+  static constexpr uint8_t numLEDs() {
+    return led_count;
+  }
+
 
   /**
    * Returns the HID driver used by the keyboard.
