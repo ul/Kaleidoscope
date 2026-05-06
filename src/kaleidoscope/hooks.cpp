@@ -27,6 +27,7 @@
 
 namespace kaleidoscope {
 
+
 // The following weak symbols are overwritten by using the
 // KALEIDOSCOPE_INIT_PLUGINS(...) macro in the firmware sketch. Their only
 // purpose is to ensure that there are no undefined symbols if
@@ -51,8 +52,6 @@ namespace kaleidoscope {
 
 _FOR_EACH_EVENT_HANDLER(INSTANTIATE_WEAK_HOOK_FUNCTION)
 // clang-format on
-
-#undef INSTANTIATE_WEAK_HOOK_FUNCTION
 
 namespace sketch_exploration {
 class Sketch;

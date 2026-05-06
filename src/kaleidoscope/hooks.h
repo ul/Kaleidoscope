@@ -39,6 +39,12 @@ class FocusSerial;
 class LEDControl;
 }  // namespace plugin
 
+namespace driver {
+namespace ble {
+class BLEBluefruit;  // Forward declaration
+}  // namespace ble
+}  // namespace driver
+
 namespace sketch_exploration {
 void pluginsExploreSketch();
 }  // namespace sketch_exploration
@@ -57,12 +63,17 @@ class Hooks {
   // The following friend declarations restrict access to
   // the hook routing system.
 
-  // Runtime_ calls Hooks::onSetup, Hooks::beforeReportingState
-  // and Hooks::afterEachCycle.
+  // Runtime_ calls various hooks including Hooks::onSetup, Hooks::beforeReportingState,
+  // Hooks::afterEachCycle, and Hooks::onPowerEvent.
   friend class Layer_;
   friend class Runtime_;
   friend class plugin::FocusSerial;
   friend class plugin::LEDControl;
+  friend class driver::ble::BLEBluefruit;  // Allow BLEBluefruit to trigger BLE connection hooks
+#ifdef ARDUINO_NRF52_ADAFRUIT
+  template<typename _Props>
+  friend class driver::mcu::nRF52840;  // Allow nRF52840 to trigger USB connection hooks
+#endif
   friend void sketch_exploration::pluginsExploreSketch();
 
  private:

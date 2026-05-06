@@ -32,6 +32,7 @@
 #include "kaleidoscope/hooks.h"                 // for Hooks
 #include "kaleidoscope/key_defs.h"              // for Key, Key_Transparent
 #include "kaleidoscope/layers.h"                // for Layer, Layer_
+#include "kaleidoscope/power_event.h"           // for PowerEvent
 #include "kaleidoscope_internal/device.h"       // for device
 
 namespace kaleidoscope {
@@ -213,6 +214,18 @@ class Runtime_ {
       key = Layer.lookupOnActiveLayer(key_addr);
     }
     return key;
+  }
+
+  /** Trigger a power-related event
+   *
+   * This method is called to notify plugins about power-related events like
+   * battery warnings, shutdown, or power source changes.
+   * 
+   * @param event The type of power event that occurred
+   * @param voltage_mv The current battery voltage in millivolts
+   */
+  void handlePowerEvent(PowerEvent event, uint16_t voltage_mv = 0) {
+    kaleidoscope::Hooks::onPowerEvent(event, voltage_mv);
   }
 
  private:

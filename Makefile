@@ -39,7 +39,7 @@ endif
 .DEFAULT_GOAL := smoke-sketches
 
 .PHONY: setup
-setup: $(ARDUINO_CLI_PATH) $(ARDUINO_DIRECTORIES_DATA)/arduino-cli.yaml install-arduino-core-avr install-arduino-core-kaleidoscope checkout-platform update prepare-virtual
+setup: $(ARDUINO_CLI_PATH) $(ARDUINO_DIRECTORIES_DATA)/arduino-cli.yaml install-arduino-core-avr install-arduino-core-kaleidoscope checkout-platform update prepare-virtual  install-arduino-core-nrf52
 	@:
 
 .PHONY: checkout-platform
@@ -145,7 +145,7 @@ cpplint:
 shellcheck:
 	bin/check-shell-scripts.sh
 
-SMOKE_SKETCHES := $(sort $(shell if [ -d ./examples ]; then find ./examples -type f -name \*ino | xargs -n 1 dirname; fi))
+SMOKE_SKETCHES := $(sort $(shell if [ -d ./examples ]; then find ./examples ./plugins/*/examples -type f -name \*ino | xargs -n 1 dirname; fi))
 
 smoke-sketches: $(SMOKE_SKETCHES)
 	@echo "Smoke-tested all the sketches"
